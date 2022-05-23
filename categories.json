@@ -1,0 +1,56 @@
+{
+    "Restaurants": [
+        "doordash",
+        "papa johns",
+        "papa john's pizza",
+        "mcdonald's",
+        "tim hortons",
+        "skipthedishes",
+        "skip the dishes",
+        "boston pizza",
+        "grimross",
+        "st. louis bar & grill fredericton",
+        "manchu wok restaurant",
+        "a&w",
+        "graystone brewing fredericton nb",
+        "montanas",
+        "bar burrito",
+        "sweet belgian desi",
+        "the cellar"
+    ],
+    "Groceries": [
+        "costco wholesale",
+        "walmart",
+        "wal-mart",
+        "sobeys",
+        "victory meat market",
+        "alcool nb",
+        "dollarama"
+    ],
+    "Phone Service": [
+        "public mobile"
+    ],
+    "Monthly Subscriptions": [
+        "netflix",
+        "spotify",
+        "google*youtube music internet",
+        "microsoft*ultimate",
+        "google*youtube member"
+    ],
+    "Entertainment": [
+        "cineplex",
+        "cnb",
+        "klub khrome",
+        "blizzard entertainment"
+    ],
+    "Transport": [
+        "trius taxi",
+        "taxi",
+        "checker cab",
+        "cab",
+        "maritime bus"
+    ],
+    "Monthly Car Expenses": [
+        "costco gas"
+    ]
+}
