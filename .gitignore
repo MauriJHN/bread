@@ -1,3 +1,4 @@
 *.csv
 *.log
 statement*
+parsed_data/

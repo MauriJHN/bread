@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 import sys
 import logging
+import os
 
 
 logging.basicConfig(filename="parse_bs.log", level=logging.DEBUG,
@@ -14,8 +15,9 @@ logger = logging.getLogger(__name__)
 
 CUSTOM_FILENAME = ""
 CATEGORY_MAPPING = "categories.json"
-STMTS_FILENAME = "statement_list.txt"
+STMTS_DIR = "statements"
 OUT_FILENAME = f"statement-{datetime.today().strftime('%Y-%m-%d')}"
+OUTPUT_DIR = "parsed_data"
 
 
 if len(sys.argv) == 2:
@@ -49,6 +51,7 @@ def _add_to_sorted(new_data: list, formatted_line: dict) -> list:
         new_data.append(formatted_line)
 
     for i in range(len(new_data)):
+        # compares the date between each entry already in list and new entry, date in index 2 of each entry
         if new_data[i][2] >= formatted_line[2]:
             sorted_data = new_data[:i] + [formatted_line] + new_data[i:]
             return sorted_data
@@ -74,27 +77,28 @@ def format_csv_line(line: list) -> list:
 def main():
     new_data = []
 
-    with open(STMTS_FILENAME) as stmt_file:
-        stmt_filenames = stmt_file.readlines()
+    stmt_filenames = os.listdir(os.path.join(os.curdir, STMTS_DIR))
 
-        # read through each statement file contained in STMTS_FILENAME
-        for f in stmt_filenames:
-            # remove any trailing space for each filename read from list file
-            logger.info(f"Reading file {f}")
-            with open(f.rstrip(), "r") as stmt_file:
-                # for each statement file, read contents using csv reader and format each line to the
-                reader = csv.reader(stmt_file)
+    # read through each statement file contained in STMTS_FILENAME
+    for f in stmt_filenames:
+        # remove any trailing space for each filename read from list file
+        logger.info(f"Reading file {f}")
+        with open(os.path.join(STMTS_DIR, f.rstrip()), "r") as stmt_file:
+            # for each statement file, read contents using csv reader and format each line to the
+            reader = csv.reader(stmt_file)
 
-                for line in reader:
-                    # checking if the csv list contains more than 6 items
-                    # also discarding line if it's header
-                    if len(line) >= 6 and "Transaction Date" not in line:
-                        # format line
-                        formatted_line = format_csv_line(line)
-                        if formatted_line:
-                            new_data.append(formatted_line)
+            for line in reader:
+                # checking if the csv list contains more than 6 items
+                # also discarding line if it's header
+                if len(line) >= 6 and "Transaction Date" not in line:
+                    # format line
+                    formatted_line = format_csv_line(line)
+                    
+                    if formatted_line:
+                        new_data = _add_to_sorted(new_data, formatted_line)
 
-    output_filename = f"{CUSTOM_FILENAME if CUSTOM_FILENAME else OUT_FILENAME}.csv"
+    os.mkdir(OUTPUT_DIR)
+    output_filename = f"{OUTPUT_DIR}/{CUSTOM_FILENAME if CUSTOM_FILENAME else OUT_FILENAME}.csv"
     with open(output_filename, "w+") as file:
         logger.info(f"Writing parsed csv data to {output_filename}")
         writer = csv.writer(file)
